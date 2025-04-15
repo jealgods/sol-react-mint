@@ -39,7 +39,7 @@ export function PhoneVerification({
         setMessage(data.error || "Failed to send verification code");
       }
     } catch {
-      setMessage("An error occurred. Please try again.");
+      setMessage("");
     } finally {
       setLoading(false);
     }

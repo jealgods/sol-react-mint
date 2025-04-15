@@ -11,7 +11,10 @@ export async function POST(request: Request) {
       !process.env.VERIFY_SERVICE_SID
     ) {
       return NextResponse.json(
-        { error: "Twilio configuration is missing" },
+        {
+          error:
+            "Twilio configuration is missing. Please check your environment variables.",
+        },
         { status: 500 }
       );
     }
@@ -27,35 +30,49 @@ export async function POST(request: Request) {
 
     // If code is provided, verify it
     if (code) {
-      const isVerified = await verifyCode(phoneNumber, code);
-      if (isVerified) {
-        const cookieStore = await cookies();
-        cookieStore.set("phone_verified", "true", {
-          path: "/",
-          maxAge: 60 * 60 * 24 * 30, // 30 days
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+      try {
+        const isVerified = await verifyCode(phoneNumber, code);
+        if (isVerified) {
+          const cookieStore = await cookies();
+          cookieStore.set("phone_verified", "true", {
+            path: "/",
+            maxAge: 60 * 60 * 24 * 30, // 30 days
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+          });
+        }
+        return NextResponse.json({
+          success: isVerified,
+          message: isVerified
+            ? "Phone number verified successfully!"
+            : "Invalid verification code",
         });
+      } catch (error: any) {
+        return NextResponse.json(
+          { error: error.message || "Failed to verify code" },
+          { status: 400 }
+        );
       }
-      return NextResponse.json({
-        success: isVerified,
-        message: isVerified
-          ? "Phone number verified successfully!"
-          : "Invalid verification code",
-      });
     }
 
     // Otherwise, send verification code
-    const status = await sendVerificationCode(phoneNumber);
-    return NextResponse.json({
-      success: true,
-      message: `Verification code sent to ${phoneNumber}`,
-      status,
-    });
-  } catch (error) {
+    try {
+      const status = await sendVerificationCode(phoneNumber);
+      return NextResponse.json({
+        success: true,
+        message: `Verification code sent to ${phoneNumber}`,
+        status,
+      });
+    } catch (error: any) {
+      return NextResponse.json(
+        { error: error.message || "Failed to send verification code" },
+        { status: 400 }
+      );
+    }
+  } catch (error: any) {
     console.error("Verification error:", error);
     return NextResponse.json(
-      { error: "Failed to process verification request" },
+      { error: error.message || "Failed to process verification request" },
       { status: 500 }
     );
   }
