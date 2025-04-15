@@ -4,6 +4,18 @@ import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   try {
+    // Check if Twilio credentials are set
+    if (
+      !process.env.TWILIO_ACCOUNT_SID ||
+      !process.env.TWILIO_AUTH_TOKEN ||
+      !process.env.VERIFY_SERVICE_SID
+    ) {
+      return NextResponse.json(
+        { error: "Twilio configuration is missing" },
+        { status: 500 }
+      );
+    }
+
     const { phoneNumber, code } = await request.json();
 
     if (!phoneNumber) {
@@ -20,7 +32,7 @@ export async function POST(request: Request) {
         const cookieStore = await cookies();
         cookieStore.set("phone_verified", "true", {
           path: "/",
-          maxAge: 60, // 30 days
+          maxAge: 60 * 60 * 24 * 30, // 30 days
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
         });

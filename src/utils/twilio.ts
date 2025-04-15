@@ -4,6 +4,10 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const verifyServiceSid = process.env.VERIFY_SERVICE_SID;
 
+if (!accountSid || !authToken || !verifyServiceSid) {
+  throw new Error("Twilio credentials are not properly configured");
+}
+
 const client = twilio(accountSid, authToken);
 
 export const sendVerificationCode = async (
@@ -11,7 +15,7 @@ export const sendVerificationCode = async (
 ): Promise<string> => {
   try {
     const verification = await client.verify.v2
-      .services(verifyServiceSid as string)
+      .services(verifyServiceSid)
       .verifications.create({ to: phoneNumber, channel: "sms" });
 
     return verification.status;
@@ -27,7 +31,7 @@ export const verifyCode = async (
 ): Promise<boolean> => {
   try {
     const verification_check = await client.verify.v2
-      .services(verifyServiceSid as string)
+      .services(verifyServiceSid)
       .verificationChecks.create({ to: phoneNumber, code });
 
     return verification_check.status === "approved";
