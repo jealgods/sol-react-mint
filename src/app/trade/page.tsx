@@ -14,13 +14,13 @@ const TradePage = () => {
   const [currentPrice] = useState(TOKEN_CONSTANTS.INITIAL_PRICE_USD);
 
   const updateAmounts = (value: string, type: "token" | "usd") => {
-    const numValue = parseFloat(value) || 0;
+    const numValue = Math.max(0, parseFloat(value) || 0);
 
     if (type === "token") {
-      setTokenAmount(value);
+      setTokenAmount(numValue.toString());
       setUsdAmount((numValue * currentPrice).toFixed(6));
     } else {
-      setUsdAmount(value);
+      setUsdAmount(numValue.toString());
       setTokenAmount((numValue / currentPrice).toFixed(0));
     }
   };
@@ -121,7 +121,8 @@ const TradePage = () => {
                   onChange={(e) => updateAmounts(e.target.value, "token")}
                   className="w-full p-2 border rounded"
                   placeholder="Enter token amount"
-                  min={TOKEN_CONSTANTS.MINIMUM_TRADE_AMOUNT}
+                  min="0"
+                  step="1"
                 />
               </div>
 
@@ -135,6 +136,8 @@ const TradePage = () => {
                   onChange={(e) => updateAmounts(e.target.value, "usd")}
                   className="w-full p-2 border rounded"
                   placeholder="Enter USD amount"
+                  min="0"
+                  step="0.000001"
                 />
               </div>
 
