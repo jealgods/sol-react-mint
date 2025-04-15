@@ -1,5 +1,11 @@
 import twilio from "twilio";
 
+interface TwilioError extends Error {
+  code?: number;
+  status?: number;
+  moreInfo?: string;
+}
+
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const verifyServiceSid = process.env.VERIFY_SERVICE_SID;
@@ -19,9 +25,10 @@ export const sendVerificationCode = async (
       .verifications.create({ to: phoneNumber, channel: "sms" });
 
     return verification.status;
-  } catch (error: any) {
-    console.error("Error sending verification code:", error);
-    throw new Error(error.message || "Failed to send verification code");
+  } catch (error) {
+    const twilioError = error as TwilioError;
+    console.error("Error sending verification code:", twilioError);
+    throw new Error(twilioError.message || "Failed to send verification code");
   }
 };
 
@@ -35,8 +42,9 @@ export const verifyCode = async (
       .verificationChecks.create({ to: phoneNumber, code });
 
     return verification_check.status === "approved";
-  } catch (error: any) {
-    console.error("Error verifying code:", error);
-    throw new Error(error.message || "Failed to verify code");
+  } catch (error) {
+    const twilioError = error as TwilioError;
+    console.error("Error verifying code:", twilioError);
+    throw new Error(twilioError.message || "Failed to verify code");
   }
 };

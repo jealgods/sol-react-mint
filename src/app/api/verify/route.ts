@@ -2,6 +2,20 @@ import { NextResponse } from "next/server";
 import { sendVerificationCode, verifyCode } from "@/utils/twilio";
 import { cookies } from "next/headers";
 
+interface TwilioError extends Error {
+  code?: number;
+  status?: number;
+  moreInfo?: string;
+}
+
+export async function GET() {
+  return NextResponse.json({
+    status: "ok",
+    message: "Verification API is working",
+    test: true,
+  });
+}
+
 export async function POST(request: Request) {
   try {
     // Check if Twilio credentials are set
@@ -47,9 +61,10 @@ export async function POST(request: Request) {
             ? "Phone number verified successfully!"
             : "Invalid verification code",
         });
-      } catch (error: any) {
+      } catch (error) {
+        const twilioError = error as TwilioError;
         return NextResponse.json(
-          { error: error.message || "Failed to verify code" },
+          { error: twilioError.message || "Failed to verify code" },
           { status: 400 }
         );
       }
@@ -63,16 +78,20 @@ export async function POST(request: Request) {
         message: `Verification code sent to ${phoneNumber}`,
         status,
       });
-    } catch (error: any) {
+    } catch (error) {
+      const twilioError = error as TwilioError;
       return NextResponse.json(
-        { error: error.message || "Failed to send verification code" },
+        { error: twilioError.message || "Failed to send verification code" },
         { status: 400 }
       );
     }
-  } catch (error: any) {
-    console.error("Verification error:", error);
+  } catch (error) {
+    const twilioError = error as TwilioError;
+    console.error("Verification error:", twilioError);
     return NextResponse.json(
-      { error: error.message || "Failed to process verification request" },
+      {
+        error: twilioError.message || "Failed to process verification request",
+      },
       { status: 500 }
     );
   }
