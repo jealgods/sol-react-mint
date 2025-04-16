@@ -42,7 +42,7 @@ export const TransactionHistory = () => {
   }, [publicKey]);
 
   return (
-    <div className="mt-8">
+    <div className="mt-2">
       <h2 className="text-xl font-bold mb-4">
         {TOKEN_CONSTANTS.SYMBOL} Transaction History
       </h2>

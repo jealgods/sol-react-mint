@@ -33,15 +33,23 @@ export const TokenBalance = ({ tokenMint }: TokenBalanceProps) => {
     balance !== null ? balance * TOKEN_CONSTANTS.INITIAL_PRICE_USD : null;
 
   return (
-    <div className="bg-gray-50 p-4 rounded">
-      <p className="text-sm text-gray-600">{TOKEN_CONSTANTS.SYMBOL} Balance</p>
-      <p className="text-xl font-bold">
-        {balance !== null ? balance.toLocaleString() : "---"}{" "}
-        {TOKEN_CONSTANTS.SYMBOL}
-      </p>
-      <p className="text-sm text-gray-600">
-        ≈ ${usdValue !== null ? usdValue.toFixed(2) : "---"} USD
-      </p>
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-gray-600">Token Balance</p>
+          <p className="text-lg font-bold text-indigo-800">
+            {balance !== null ? balance.toLocaleString() : "---"}{" "}
+            {TOKEN_CONSTANTS.SYMBOL}
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-sm text-gray-600">USD Value</p>
+          <p className="text-lg font-bold text-purple-800">
+            ${usdValue !== null ? usdValue.toFixed(2) : "---"}
+          </p>
+        </div>
+      </div>
+      <div className="h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent" />
     </div>
   );
 };
