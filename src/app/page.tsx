@@ -54,7 +54,7 @@ export default function Home() {
                 <Link
                   href="/whitepaper.pdf"
                   target="_blank"
-                  className="text-lg font-semibold text-indigo-800 mb-4"
+                  className="text-lg font-semibold text-indigo-800 mb-4 underline"
                 >
                   Our Whitepaper
                 </Link>
