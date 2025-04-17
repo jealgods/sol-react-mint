@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
 import dynamic from "next/dynamic";
@@ -21,39 +21,10 @@ const WalletMultiButton = dynamic(
 export default function TradePage() {
   const { publicKey } = useWallet();
   const router = useRouter();
-  const [isVerified, setIsVerified] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [tokenAmount, setTokenAmount] = useState("");
   const [usdAmount, setUsdAmount] = useState("");
   const [action, setAction] = useState<"buy" | "sell">("buy");
   const [currentPrice] = useState(TOKEN_CONSTANTS.INITIAL_PRICE_USD);
-
-  useEffect(() => {
-    const checkVerification = async () => {
-      try {
-        const response = await fetch("/api/verify/status");
-        const data = await response.json();
-        setIsVerified(data.verified);
-        if (!data.verified) {
-          router.replace("/verify");
-        }
-      } catch (error) {
-        console.error("Error checking verification status:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkVerification();
-  }, [router]);
-
-  if (loading) {
-    return null;
-  }
-
-  if (!isVerified) {
-    return null;
-  }
 
   const updateAmounts = (value: string, type: "token" | "usd") => {
     const numValue = parseFloat(value) || 0;
@@ -79,8 +50,22 @@ export default function TradePage() {
       return;
     }
 
-    // TODO: Implement actual trading logic
-    console.log(`${action}ing ${amount} tokens`);
+    // Check verification status before proceeding with trade
+    try {
+      const response = await fetch("/api/verify/status");
+      const data = await response.json();
+
+      if (!data.verified) {
+        router.push("/verify");
+        return;
+      }
+
+      // TODO: Implement actual trading logic
+      console.log(`${action}ing ${amount} tokens`);
+    } catch (error) {
+      console.error("Error checking verification status:", error);
+      alert("Unable to process trade. Please try again.");
+    }
   };
 
   return (
@@ -204,7 +189,7 @@ export default function TradePage() {
 
                   <button
                     onClick={handleTrade}
-                    disabled={!publicKey || !tokenAmount || loading}
+                    disabled={!publicKey || !tokenAmount}
                     className={`w-full py-2 px-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                       action === "buy"
                         ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
