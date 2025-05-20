@@ -18,7 +18,7 @@ export const fetchApi = async <T>(
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return {
       data: null as T,
       error: "An error occurred while fetching data",
