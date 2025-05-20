@@ -3,10 +3,10 @@ export const TOKEN_CONSTANTS = {
   SYMBOL: "LLC",
   MINT_ADDRESS: "YOUR_TOKEN_MINT_ADDRESS", // Replace with your actual token mint address
   TOTAL_SUPPLY: 1_000_000_000, // 10^9
-  POOL_LIQUIDITY_USD: 1_000, // $1000
+  POOL_LIQUIDITY_USD: 1_000_000, // $1000
   INITIAL_PRICE_USD: 0.000001, // 10^-6 $
   TOKEN_DECIMALS: 9,
-  MINIMUM_TRADE_AMOUNT: 1000, // Minimum tokens per trade
+  MINIMUM_TRADE_AMOUNT: 0, // Minimum tokens per trade
 };
 
 export const calculateTokenPrice = (

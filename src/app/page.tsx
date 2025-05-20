@@ -1,24 +1,22 @@
 "use client";
 
-import { TokenBalance } from "../components/TokenBalance";
-import { TransactionHistory } from "../components/TransactionHistory";
-import Link from "next/link";
-import { TOKEN_CONSTANTS } from "../constants/token";
-import { useState } from "react";
-import PrivacyPolicy from "../components/PrivacyPolicy";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
+// import { TokenBalance } from "../components/TokenBalance";
+// import { TransactionHistory } from "../components/TransactionHistory";
+// import Link from "next/link";
+// import { TOKEN_CONSTANTS } from "../constants/token";
+// import { useState } from "react";
+// import PrivacyPolicy from "../components/PrivacyPolicy";
+
+import TradePage from "./trade/page";
 
 export default function Home() {
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  // const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <Header />
-      <main className="py-8 px-4 sm:px-6 lg:px-8">
+      {/* <main className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-            {/* Left Column - Trade Section */}
             <div className="w-full">
               <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-3 xs:p-4 sm:p-6">
                 <h2 className="text-lg font-semibold text-indigo-800 mb-4">
@@ -47,9 +45,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Column - Whitepaper and Balance */}
             <div className="w-full space-y-2 xs:space-y-3 sm:space-y-4">
-              {/* Whitepaper */}
               <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-lg p-3 xs:p-4 sm:p-6 border border-indigo-100">
                 <Link
                   href="/whitepaper.pdf"
@@ -70,7 +66,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Token Balance */}
               <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-lg p-3 xs:p-4 sm:p-6 border border-indigo-100">
                 <h2 className="text-lg font-semibold text-indigo-800 mb-2">
                   Your {TOKEN_CONSTANTS.SYMBOL} Balance
@@ -81,8 +76,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Transaction History - Now below both columns */}
           <div className="mt-8">
             <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-lg p-3 xs:p-4 sm:p-6 border border-indigo-100">
               <h2 className="text-lg font-semibold text-indigo-800 mb-2">
@@ -94,8 +87,8 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+      </main> */}
+      <TradePage />
     </div>
   );
 }
