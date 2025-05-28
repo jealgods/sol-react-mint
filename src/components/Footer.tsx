@@ -1,15 +1,16 @@
 import { TOKEN_CONSTANTS } from "../constants/token";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <footer className="bg-slate-800/50 backdrop-blur-xl border-t border-purple-500/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <footer className="bg-black/90 backdrop-blur-xl border-t border-neutral-800">
+      <div className="max-w-full mx-auto px-6 sm:px-12 lg:px-24 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 rounded-full">
+              <div className="bg-gradient-to-br from-blue-600 via-violet-700 to-fuchsia-600 p-2 rounded-full">
                 <Image
                   src="/images/longlifecoin.svg"
                   alt={`${TOKEN_CONSTANTS.NAME} Logo`}
@@ -18,11 +19,11 @@ export const Footer = () => {
                   className="rounded-full"
                 />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-fuchsia-400 to-blue-400 bg-clip-text text-transparent">
                 {TOKEN_CONSTANTS.NAME}
               </span>
             </div>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-neutral-300">
               The future of decentralized trading
             </p>
           </div>
@@ -34,28 +35,28 @@ export const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
+                <Link
                   href="/trade"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Trade
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/markets"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Markets
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="Portfolio"
+                <Link
+                  href="/portfolio"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Portfolio
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -65,28 +66,28 @@ export const Footer = () => {
             <h3 className="text-sm font-semibold text-white mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Documentation
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   API
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Support
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -96,28 +97,28 @@ export const Footer = () => {
             <h3 className="text-sm font-semibold text-white mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="#"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Risk Disclosure
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -7,7 +7,7 @@
 // import { useState } from "react";
 // import PrivacyPolicy from "../components/PrivacyPolicy";
 
-import TradePage from "./trade/page";
+import TradePage from "./(main)/trade/page";
 
 export default function Home() {
   // const [privacyAccepted, setPrivacyAccepted] = useState(false);
