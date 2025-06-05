@@ -5,6 +5,8 @@ import { WalletProvider } from "../providers/WalletProvider";
 import { AuthProvider } from "../context/AuthContext";
 import "./globals.css";
 import { metadata as siteMetadata } from "./metadata";
+import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 const geistSans = Geist({ subsets: ["latin"] });
@@ -28,7 +30,11 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.className} ${inter.className} antialiased`}>
         <WalletProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <Header />
+            {children}
+            <Footer />
+          </AuthProvider>
         </WalletProvider>
       </body>
     </html>

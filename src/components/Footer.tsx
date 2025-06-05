@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <footer className="bg-black/90 backdrop-blur-xl border-t border-neutral-800">
+    <footer className="bg-neutral-950 border-t border-neutral-800">
       <div className="max-w-full mx-auto px-6 sm:px-12 lg:px-24 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
@@ -36,7 +36,7 @@ export const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/trade"
+                  href="/swap"
                   className="text-sm text-slate-400 hover:text-purple-400 transition-colors"
                 >
                   Trade

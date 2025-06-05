@@ -4,18 +4,133 @@ import { useState, useEffect, useRef } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import { TOKEN_CONSTANTS } from "@/constants/token";
-import { Header } from "../../../components/Header";
-import { Footer } from "../../../components/Footer";
 import TradingViewWidget from "@/components/TradingViewWidget";
+import {
+  FiPlusCircle,
+  FiRepeat,
+  FiArrowUpCircle,
+  FiArrowDownCircle,
+  FiMessageCircle,
+  FiShare2,
+} from "react-icons/fi";
+import { GiBridge } from "react-icons/gi";
+import { MdOutlineAtm } from "react-icons/md";
+import { useRouter } from "next/navigation";
+import { FaTwitter, FaTelegramPlane, FaLink } from "react-icons/fa";
+
+function WalletAddressModal({
+  open,
+  onClose,
+  address,
+}: {
+  open: boolean;
+  onClose: () => void;
+  address: string;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-neutral-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 relative border border-neutral-700">
+        <button
+          className="absolute top-4 right-4 text-neutral-400 hover:text-fuchsia-400"
+          onClick={onClose}
+        >
+          ×
+        </button>
+        <h3 className="text-lg font-bold text-white mb-4">
+          Your Wallet Address
+        </h3>
+        <div className="flex flex-col items-center gap-2">
+          <span className="break-all text-center text-fuchsia-400 font-mono text-sm bg-neutral-800 rounded-lg px-4 py-2 select-all">
+            {address}
+          </span>
+          <button
+            className="mt-2 px-4 py-2 rounded-lg bg-gradient-to-r from-fuchsia-500 to-blue-500 text-white font-bold hover:from-fuchsia-600 hover:to-blue-600 transition"
+            onClick={() => {
+              navigator.clipboard.writeText(address);
+            }}
+          >
+            Copy Address
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ShareModal({
+  open,
+  onClose,
+  url,
+}: {
+  open: boolean;
+  onClose: () => void;
+  url: string;
+}) {
+  if (!open) return null;
+  const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+    url
+  )}`;
+  const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}`;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-neutral-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 relative border border-neutral-700">
+        <button
+          className="absolute top-4 right-4 text-neutral-400 hover:text-fuchsia-400"
+          onClick={onClose}
+        >
+          ×
+        </button>
+        <h3 className="text-lg font-bold text-white mb-4">Share this page</h3>
+        <div className="flex flex-col items-center gap-2">
+          <span className="break-all text-center text-fuchsia-400 font-mono text-sm bg-neutral-800 rounded-lg px-4 py-2 select-all">
+            {url}
+          </span>
+          <button
+            className="mt-2 px-4 py-2 rounded-lg bg-gradient-to-r from-fuchsia-500 to-blue-500 text-white font-bold hover:from-fuchsia-600 hover:to-blue-600 transition flex items-center gap-2"
+            onClick={() => {
+              navigator.clipboard.writeText(url);
+            }}
+          >
+            <FaLink /> Copy Link
+          </button>
+          <div className="flex gap-4 mt-4">
+            <a
+              href={twitterUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-500 text-2xl"
+              title="Share on Twitter"
+            >
+              <FaTwitter />
+            </a>
+            <a
+              href={telegramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:text-blue-400 text-2xl"
+              title="Share on Telegram"
+            >
+              <FaTelegramPlane />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function TradePage() {
   const { publicKey, wallet } = useWallet();
+  const router = useRouter();
   const [tokenAmount, setTokenAmount] = useState("");
   const [usdAmount, setUsdAmount] = useState("");
   const [action, setAction] = useState<"buy" | "sell">("buy");
   const [currentPrice] = useState(1.5);
   const [isChartLoading, setIsChartLoading] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const updateAmounts = (value: string, type: "token" | "usd") => {
     const numValue = parseFloat(value) || 0;
@@ -74,9 +189,10 @@ export default function TradePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-black">
-      <Header />
       <main className="flex-1 py-6 px-2 sm:px-4 lg:px-8">
         <div className="w-full">
+          {/* Action Buttons Grid */}
+
           <div className="relative h-[600px] w-full rounded-lg bg-black shadow-2xl border border-neutral-800">
             {isChartLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10">
@@ -91,7 +207,111 @@ export default function TradePage() {
               width="100%"
             />
           </div>
-
+          <div className="w-full max-w-2xl mx-auto my-10">
+            <div className="grid grid-cols-4 gap-y-8 gap-x-4 sm:gap-x-8">
+              {/* Buy */}
+              <div className="flex flex-col items-center">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  onClick={() => {
+                    setAction("buy");
+                    document
+                      .getElementById("trade-toggle")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <FiPlusCircle size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Buy
+                </span>
+              </div>
+              {/* Swap */}
+              <div className="flex flex-col items-center">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  onClick={() => router.push("/swap")}
+                >
+                  <FiRepeat size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Swap
+                </span>
+              </div>
+              {/* Bridge */}
+              <div className="flex flex-col items-center">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  onClick={() => router.push("/bridge")}
+                >
+                  <GiBridge size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Bridge
+                </span>
+              </div>
+              {/* Cash out */}
+              <div className="flex flex-col items-center">
+                <button className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all">
+                  <MdOutlineAtm size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Cash out
+                </span>
+              </div>
+              {/* Send */}
+              <div className="flex flex-col items-center">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  onClick={() => {
+                    setAction("sell");
+                    document
+                      .getElementById("trade-toggle")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
+                  <FiArrowUpCircle size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Send
+                </span>
+              </div>
+              {/* Receive */}
+              <div className="flex flex-col items-center">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  onClick={() => publicKey && setShowWalletModal(true)}
+                  disabled={!publicKey}
+                >
+                  <FiArrowDownCircle size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Receive
+                </span>
+              </div>
+              {/* Text send */}
+              <div className="flex flex-col items-center">
+                <button className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all">
+                  <FiMessageCircle size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Text send
+                </span>
+              </div>
+              {/* Share */}
+              <div className="flex flex-col items-center">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  onClick={() => setShowShareModal(true)}
+                >
+                  <FiShare2 size={32} />
+                </button>
+                <span className="text-sm text-neutral-200 font-medium mt-1">
+                  Share
+                </span>
+              </div>
+            </div>
+          </div>
           {/* Trade Form Section */}
           <div className="mt-6 bg-black/90 rounded-2xl shadow-2xl p-6 sm:p-10 border border-neutral-800">
             <div className="bg-black/95 rounded-2xl shadow-lg p-6 sm:p-8">
@@ -145,7 +365,10 @@ export default function TradePage() {
                 </div>
 
                 {/* Buy/Sell Toggle */}
-                <div className="relative flex w-full max-w-xs mx-auto bg-neutral-900 rounded-full p-1 mb-2 border border-neutral-800">
+                <div
+                  id="trade-toggle"
+                  className="relative flex w-full max-w-xs mx-auto bg-neutral-900 rounded-full p-1 mb-2 border border-neutral-800"
+                >
                   <span
                     className={`absolute top-1 left-1 h-[calc(100%-0.5rem)] w-1/2 rounded-full transition-all duration-300 z-0
                       ${
@@ -245,7 +468,18 @@ export default function TradePage() {
           </div>
         </div>
       </main>
-      <Footer />
+      {/* Wallet Address Modal */}
+      <WalletAddressModal
+        open={showWalletModal}
+        onClose={() => setShowWalletModal(false)}
+        address={publicKey?.toBase58?.() || ""}
+      />
+      {/* Share Modal */}
+      <ShareModal
+        open={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        url={typeof window !== "undefined" ? window.location.href : ""}
+      />
     </div>
   );
 }

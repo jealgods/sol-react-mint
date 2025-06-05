@@ -16,7 +16,7 @@ const WalletMultiButton = dynamic(
 
 export const Header = () => {
   return (
-    <header className="bg-black/90 backdrop-blur-xl border-b border-neutral-800">
+    <header className="bg-neutral-950 border-b border-neutral-800">
       <div className="max-w-full mx-auto px-6 sm:px-12 lg:px-24 py-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
