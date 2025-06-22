@@ -12,24 +12,27 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
   const handleAccept = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     setPrivacyAccepted(isChecked);
-    if (isChecked) {
+  };
+
+  const handleNext = () => {
+    if (privacyAccepted) {
       onAccept();
     }
   };
 
   return (
-    <div className="bg-white/90 rounded-xl shadow-lg p-2 sm:p-6">
+    <div className="bg-neutral-900/90 rounded-xl shadow-lg p-2 sm:p-6 border border-neutral-800">
       <div className="space-y-4">
         {/* Privacy Policy Scrollable Content */}
-        <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-xl border border-indigo-100 overflow-hidden">
-          <div className="h-[200px] overflow-y-auto p-3 scrollbar-thin scrollbar-thumb-indigo-300 scrollbar-track-indigo-50">
+        <div className="bg-gradient-to-br from-neutral-800/50 to-neutral-900/50 rounded-xl border border-neutral-700 overflow-hidden">
+          <div className="h-[200px] overflow-y-auto p-3 scrollbar-thin scrollbar-thumb-fuchsia-500 scrollbar-track-neutral-800">
             <div className="space-y-3">
               {/* Introduction */}
               <div>
-                <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-fuchsia-400 to-blue-400 bg-clip-text text-transparent">
                   Introduction
                 </h1>
-                <p className="text-gray-700 leading-relaxed text-sm">
+                <p className="text-neutral-300 leading-relaxed text-sm">
                   Welcome to LongLifeCoin. Your privacy is important to us, and
                   we are committed to protecting your personal information. This
                   Privacy Policy explains how we collect, use, and safeguard
@@ -42,10 +45,10 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* Terms of Use */}
               <div>
-                <h2 className="text-lg font-semibold mb-1 text-indigo-800">
+                <h2 className="text-lg font-semibold mb-1 text-fuchsia-400">
                   Terms of Use
                 </h2>
-                <p className="text-gray-700 leading-relaxed text-sm">
+                <p className="text-neutral-300 leading-relaxed text-sm">
                   If you didn&apos;t read this document carefully, then, you
                   cannot sue this website for privacy and policy. It&apos;s you
                   who decide to use Hua Tuo&apos;s method, so, everything is
@@ -61,10 +64,10 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* Information We Collect */}
               <div>
-                <h2 className="text-lg font-semibold mb-1 text-indigo-800">
+                <h2 className="text-lg font-semibold mb-1 text-fuchsia-400">
                   Information We Collect
                 </h2>
-                <p className="text-gray-700 mb-1 text-sm">
+                <p className="text-neutral-300 mb-1 text-sm">
                   We may collect the following types of information to provide
                   and improve our Services: After we complete the transaction,
                   we delete all the buyer&apos;s information.
@@ -73,15 +76,15 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
                 <div className="space-y-1">
                   {/* Personal Information */}
                   <div>
-                    <h3 className="text-base font-medium mb-0.5 text-indigo-700">
+                    <h3 className="text-base font-medium mb-0.5 text-blue-400">
                       1. Personal Information
                     </h3>
-                    <p className="text-gray-700 mb-0.5 text-sm">
+                    <p className="text-neutral-300 mb-0.5 text-sm">
                       When you register for an account, purchase tokens, or
                       interact with our Services, we may collect personal
                       information such as:
                     </p>
-                    <ul className="list-disc pl-3 text-gray-700 space-y-0.5 text-sm">
+                    <ul className="list-disc pl-3 text-neutral-300 space-y-0.5 text-sm">
                       <li>Full name</li>
                       <li>Email address</li>
                       <li>Phone number</li>
@@ -92,14 +95,14 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
                   {/* Non-Personal Information */}
                   <div>
-                    <h3 className="text-base font-medium mb-0.5 text-indigo-700">
+                    <h3 className="text-base font-medium mb-0.5 text-blue-400">
                       2. Non-Personal Information
                     </h3>
-                    <p className="text-gray-700 mb-0.5 text-sm">
+                    <p className="text-neutral-300 mb-0.5 text-sm">
                       We automatically collect certain non-personal information
                       when you use our Services, such as:
                     </p>
-                    <ul className="list-disc pl-3 text-gray-700 space-y-0.5 text-sm">
+                    <ul className="list-disc pl-3 text-neutral-300 space-y-0.5 text-sm">
                       <li>Browser type and version</li>
                       <li>Operating system</li>
                       <li>IP address</li>
@@ -113,10 +116,10 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
                   {/* Blockchain Data */}
                   <div>
-                    <h3 className="text-base font-medium mb-0.5 text-indigo-700">
+                    <h3 className="text-base font-medium mb-0.5 text-blue-400">
                       3. Blockchain Data
                     </h3>
-                    <p className="text-gray-700 text-sm">
+                    <p className="text-neutral-300 text-sm">
                       Transactions made through the LongLifeCoin blockchain are
                       publicly recorded on the blockchain ledger. This data may
                       include your wallet address, transaction history, and
@@ -129,13 +132,13 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* How We Use Your Information */}
               <div>
-                <h2 className="text-base font-semibold mb-1 text-indigo-800">
+                <h2 className="text-base font-semibold mb-1 text-fuchsia-400">
                   How We Use Your Information
                 </h2>
-                <p className="text-gray-700 mb-1 text-xs">
+                <p className="text-neutral-300 mb-1 text-xs">
                   We use your information for the following purposes:
                 </p>
-                <ul className="list-disc pl-3 text-gray-700 space-y-0.5 text-xs">
+                <ul className="list-disc pl-3 text-neutral-300 space-y-0.5 text-xs">
                   <li>
                     <span className="font-semibold">To Provide Services:</span>{" "}
                     To process transactions, manage your account, and deliver
@@ -161,14 +164,14 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* How We Share Your Information */}
               <div>
-                <h2 className="text-base font-semibold mb-1 text-indigo-800">
+                <h2 className="text-base font-semibold mb-1 text-fuchsia-400">
                   How We Share Your Information
                 </h2>
-                <p className="text-gray-700 mb-1 text-xs">
+                <p className="text-neutral-300 mb-1 text-xs">
                   We do not sell or rent your personal information. However, we
                   may share your information under the following circumstances:
                 </p>
-                <ul className="list-disc pl-3 text-gray-700 space-y-0.5 text-xs">
+                <ul className="list-disc pl-3 text-neutral-300 space-y-0.5 text-xs">
                   <li>
                     <span className="font-semibold">
                       With Service Providers:
@@ -198,10 +201,10 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* Cookies and Tracking Technologies */}
               <div>
-                <h2 className="text-base font-semibold mb-1 text-indigo-800">
+                <h2 className="text-base font-semibold mb-1 text-fuchsia-400">
                   Cookies and Tracking Technologies
                 </h2>
-                <p className="text-gray-700 text-xs">
+                <p className="text-neutral-300 text-xs">
                   We use cookies and similar tracking technologies to collect
                   information about your interactions with our Services. This
                   helps us improve functionality, remember user preferences, and
@@ -212,10 +215,10 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* Data Security */}
               <div>
-                <h2 className="text-base font-semibold mb-1 text-indigo-800">
+                <h2 className="text-base font-semibold mb-1 text-fuchsia-400">
                   Data Security
                 </h2>
-                <p className="text-gray-700 text-xs">
+                <p className="text-neutral-300 text-xs">
                   We employ industry-standard security measures to protect your
                   information. However, no system can guarantee absolute
                   security. You are responsible for safeguarding your account
@@ -226,10 +229,10 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
 
               {/* Third-Party Links */}
               <div>
-                <h2 className="text-base font-semibold mb-1 text-indigo-800">
+                <h2 className="text-base font-semibold mb-1 text-fuchsia-400">
                   Third-Party Links
                 </h2>
-                <p className="text-gray-700 text-xs">
+                <p className="text-neutral-300 text-xs">
                   Our Services may contain links to third-party websites or
                   services. We are not responsible for their privacy practices.
                   We encourage you to review their privacy policies before
@@ -241,24 +244,36 @@ const PrivacyPolicy = ({ onAccept }: Props) => {
         </div>
 
         {/* Consent Checkbox */}
-        <div className="bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-xl p-4 border border-indigo-100">
+        <div className="bg-gradient-to-br from-neutral-800/50 to-neutral-900/50 rounded-xl p-4 border border-neutral-700">
           <label className="flex items-center space-x-3 cursor-pointer group">
             <div className="relative w-5 h-5 flex-shrink-0">
               <input
                 type="checkbox"
-                className="w-5 h-5 rounded-lg border-2 border-indigo-300 checked:border-indigo-600 checked:bg-indigo-600 appearance-none transition-all duration-200 cursor-pointer group-hover:border-indigo-400"
+                className="w-5 h-5 rounded-lg border-2 border-neutral-600 checked:border-fuchsia-500 checked:bg-fuchsia-500 appearance-none transition-all duration-200 cursor-pointer group-hover:border-fuchsia-400"
                 onChange={handleAccept}
                 checked={privacyAccepted}
               />
               {privacyAccepted && (
-                <div className="absolute inset-[2px] bg-indigo-600 rounded-md border-2 border-white" />
+                <div className="absolute inset-[2px] bg-fuchsia-500 rounded-md border-2 border-white" />
               )}
             </div>
-            <span className="text-gray-700 font-medium">
+            <span className="text-neutral-300 font-medium">
               I have read and agree to the Privacy Policy and Terms of Use
             </span>
           </label>
         </div>
+
+        {/* Next Button */}
+        {privacyAccepted && (
+          <div className="flex justify-center">
+            <button
+              onClick={handleNext}
+              className="px-8 py-3 rounded-xl text-lg font-bold bg-gradient-to-r from-fuchsia-500 to-blue-500 hover:from-fuchsia-600 hover:to-blue-600 text-white shadow-2xl transition-all duration-200 transform hover:scale-105"
+            >
+              Continue to Trading
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

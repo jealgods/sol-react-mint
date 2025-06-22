@@ -5,6 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import { TOKEN_CONSTANTS } from "@/constants/token";
 import TradingViewWidget from "@/components/TradingViewWidget";
+import PrivacyPolicyWrapper from "@/components/PrivacyPolicyWrapper";
 import {
   FiPlusCircle,
   FiRepeat,
@@ -120,14 +121,13 @@ function ShareModal({
   );
 }
 
-export default function TradePage() {
+function TradeContent() {
   const { publicKey, wallet } = useWallet();
   const router = useRouter();
   const [tokenAmount, setTokenAmount] = useState("");
   const [usdAmount, setUsdAmount] = useState("");
   const [action, setAction] = useState<"buy" | "sell">("buy");
   const [currentPrice] = useState(1.5);
-  const [isChartLoading, setIsChartLoading] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -178,27 +178,13 @@ export default function TradePage() {
     }
   }, [wallet]);
 
-  // Set loading to false after a short delay to ensure chart is loaded
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsChartLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className="min-h-screen flex flex-col bg-black">
       <main className="flex-1 py-6 px-2 sm:px-4 lg:px-8">
         <div className="w-full">
           {/* Action Buttons Grid */}
 
-          <div className="relative h-[600px] w-full rounded-lg bg-black shadow-2xl border border-neutral-800">
-            {isChartLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-fuchsia-500"></div>
-              </div>
-            )}
+          <div className="relative h-[400px] md:h-[600px] w-full rounded-lg bg-black shadow-2xl border border-neutral-800">
             <TradingViewWidget
               symbol={"COINBASE:SOLUSD"}
               theme={"dark"}
@@ -481,5 +467,16 @@ export default function TradePage() {
         url={typeof window !== "undefined" ? window.location.href : ""}
       />
     </div>
+  );
+}
+
+export default function TradePage() {
+  return (
+    <PrivacyPolicyWrapper
+      title="Welcome to LongLifeCoin Trading"
+      subtitle="Please review and accept our Privacy Policy to continue trading"
+    >
+      <TradeContent />
+    </PrivacyPolicyWrapper>
   );
 }

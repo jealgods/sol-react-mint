@@ -6,6 +6,7 @@ import { FaEthereum } from "react-icons/fa";
 import { SiSolana } from "react-icons/si";
 import { MdClose } from "react-icons/md";
 import Image from "next/image";
+import PrivacyPolicyWrapper from "@/components/PrivacyPolicyWrapper";
 
 const CHAINS = [
   {
@@ -29,18 +30,6 @@ const TOKENS = [
     ),
   },
 ];
-
-type Chain = {
-  symbol: string;
-  name: string;
-  icon: React.ReactElement;
-};
-
-type Token = {
-  symbol: string;
-  name: string;
-  icon: React.ReactElement;
-};
 
 interface SelectModalProps<T> {
   open: boolean;
@@ -107,7 +96,7 @@ function SelectModal<
   );
 }
 
-export default function BridgePage() {
+function BridgeContent() {
   const [fromChain, setFromChain] = useState(CHAINS[0]);
   const [toChain, setToChain] = useState(CHAINS[1]);
   const [token, setToken] = useState(TOKENS[0]);
@@ -198,28 +187,39 @@ export default function BridgePage() {
           </div>
         </div>
         {/* Select Modals */}
-        <SelectModal<Chain>
+        <SelectModal
           open={showFromChainModal}
           onClose={() => setShowFromChainModal(false)}
           onSelect={setFromChain}
-          items={CHAINS.filter((c) => c.symbol !== toChain.symbol)}
-          label="Source Chain"
+          items={CHAINS}
+          label="chain"
         />
-        <SelectModal<Chain>
+        <SelectModal
           open={showToChainModal}
           onClose={() => setShowToChainModal(false)}
           onSelect={setToChain}
-          items={CHAINS.filter((c) => c.symbol !== fromChain.symbol)}
-          label="Destination Chain"
+          items={CHAINS}
+          label="chain"
         />
-        <SelectModal<Token>
+        <SelectModal
           open={showTokenModal}
           onClose={() => setShowTokenModal(false)}
           onSelect={setToken}
           items={TOKENS}
-          label="Token"
+          label="token"
         />
       </main>
     </div>
+  );
+}
+
+export default function BridgePage() {
+  return (
+    <PrivacyPolicyWrapper
+      title="Welcome to LongLifeCoin Bridge"
+      subtitle="Please review and accept our Privacy Policy to continue bridging"
+    >
+      <BridgeContent />
+    </PrivacyPolicyWrapper>
   );
 }

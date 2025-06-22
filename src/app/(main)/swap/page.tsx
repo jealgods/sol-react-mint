@@ -7,6 +7,7 @@ import { SiTether, SiBitcoincash } from "react-icons/si";
 import { MdClose } from "react-icons/md";
 import Image from "next/image";
 import { HiSwitchHorizontal } from "react-icons/hi";
+import PrivacyPolicyWrapper from "@/components/PrivacyPolicyWrapper";
 
 const TOKENS = [
   {
@@ -111,7 +112,7 @@ function TokenSelectModal({
   );
 }
 
-export default function SwapPage() {
+function SwapContent() {
   const [fromToken, setFromToken] = useState(TOKENS[0]);
   const [toToken, setToToken] = useState(TOKENS[2]);
   const [fromAmount, setFromAmount] = useState("");
@@ -219,15 +220,26 @@ export default function SwapPage() {
           open={showFromModal}
           onClose={() => setShowFromModal(false)}
           onSelect={setFromToken}
-          tokens={TOKENS.filter((t) => t.symbol !== toToken.symbol)}
+          tokens={TOKENS}
         />
         <TokenSelectModal
           open={showToModal}
           onClose={() => setShowToModal(false)}
           onSelect={setToToken}
-          tokens={TOKENS.filter((t) => t.symbol !== fromToken.symbol)}
+          tokens={TOKENS}
         />
       </main>
     </div>
+  );
+}
+
+export default function SwapPage() {
+  return (
+    <PrivacyPolicyWrapper
+      title="Welcome to LongLifeCoin Swap"
+      subtitle="Please review and accept our Privacy Policy to continue swapping"
+    >
+      <SwapContent />
+    </PrivacyPolicyWrapper>
   );
 }
