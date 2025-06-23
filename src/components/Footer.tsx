@@ -8,9 +8,14 @@ import PrivacyPolicy from "./PrivacyPolicy";
 
 export const Footer = () => {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const handlePrivacyAccept = () => {
     setShowPrivacyModal(false);
+  };
+
+  const handleTermsAccept = () => {
+    setShowTermsModal(false);
   };
 
   return (
@@ -119,7 +124,7 @@ export const Footer = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => setShowPrivacyModal(true)}
+                    onClick={() => setShowTermsModal(true)}
                     className="text-sm text-slate-400 hover:text-purple-400 transition-colors text-left"
                   >
                     Terms of Service
@@ -212,6 +217,25 @@ export const Footer = () => {
                 </p>
               </div>
               <PrivacyPolicy onAccept={handlePrivacyAccept} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Terms of Service Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="bg-neutral-900/95 rounded-2xl shadow-2xl border border-neutral-700 p-6">
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-fuchsia-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                  Terms of Service
+                </h1>
+                <p className="text-neutral-300 text-base">
+                  Please review our Terms of Service
+                </p>
+              </div>
+              <PrivacyPolicy onAccept={handleTermsAccept} />
             </div>
           </div>
         </div>

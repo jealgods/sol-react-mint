@@ -6,6 +6,7 @@ import Image from "next/image";
 import { TOKEN_CONSTANTS } from "@/constants/token";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import PrivacyPolicyWrapper from "@/components/PrivacyPolicyWrapper";
+import PrivacyPolicy from "@/components/PrivacyPolicy";
 import {
   FiPlusCircle,
   FiRepeat,
@@ -131,6 +132,65 @@ function TradeContent() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [pendingTradeAction, setPendingTradeAction] = useState<
+    "buy" | "sell" | null
+  >(null);
+
+  // Check session storage for privacy policy acceptance
+  const checkPrivacyAccepted = () => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("privacyPolicyAccepted") === "true";
+    }
+    return false;
+  };
+
+  const handlePrivacyAccept = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("privacyPolicyAccepted", "true");
+    }
+    setShowPrivacyModal(false);
+
+    // Execute pending trade action if any
+    if (pendingTradeAction) {
+      executeTrade(pendingTradeAction);
+      setPendingTradeAction(null);
+    }
+  };
+
+  const executeTrade = async (tradeAction: "buy" | "sell") => {
+    if (!publicKey) return;
+
+    const amount = parseFloat(tokenAmount);
+    if (isNaN(amount) || amount < TOKEN_CONSTANTS.MINIMUM_TRADE_AMOUNT) {
+      alert(
+        `Minimum trade amount is ${TOKEN_CONSTANTS.MINIMUM_TRADE_AMOUNT} tokens`
+      );
+      return;
+    }
+
+    // Here you would implement the actual trade logic
+    console.log(`Executing ${tradeAction} for ${amount} tokens`);
+    alert(
+      `${tradeAction.toUpperCase()} order placed for ${amount} ${
+        TOKEN_CONSTANTS.SYMBOL
+      }`
+    );
+  };
+
+  const handleTrade = async () => {
+    if (!publicKey) return;
+
+    // Check if privacy policy is accepted
+    if (!checkPrivacyAccepted()) {
+      setPendingTradeAction(action);
+      setShowPrivacyModal(true);
+      return;
+    }
+
+    // If privacy policy is accepted, proceed with trade
+    executeTrade(action);
+  };
 
   const updateAmounts = (value: string, type: "token" | "usd") => {
     const numValue = parseFloat(value) || 0;
@@ -140,18 +200,6 @@ function TradeContent() {
     } else {
       setUsdAmount(value);
       setTokenAmount((numValue / currentPrice).toFixed(2));
-    }
-  };
-
-  const handleTrade = async () => {
-    if (!publicKey) return;
-
-    const amount = parseFloat(tokenAmount);
-    if (isNaN(amount) || amount < TOKEN_CONSTANTS.MINIMUM_TRADE_AMOUNT) {
-      alert(
-        `Minimum trade amount is ${TOKEN_CONSTANTS.MINIMUM_TRADE_AMOUNT} tokens`
-      );
-      return;
     }
   };
 
@@ -466,6 +514,25 @@ function TradeContent() {
         onClose={() => setShowShareModal(false)}
         url={typeof window !== "undefined" ? window.location.href : ""}
       />
+      {/* Privacy Policy Modal for Trading */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="bg-neutral-900/95 rounded-2xl shadow-2xl border border-neutral-700 p-6">
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-fuchsia-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                  Privacy Policy Required
+                </h1>
+                <p className="text-neutral-300 text-base">
+                  Please review and accept our Privacy Policy to continue with
+                  your {pendingTradeAction} transaction
+                </p>
+              </div>
+              <PrivacyPolicy onAccept={handlePrivacyAccept} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
