@@ -66,25 +66,28 @@ const PrivacyPolicyWrapper = ({
     );
   }
 
-  if (!privacyAccepted) {
-    return (
-      <div className="min-h-screen flex flex-col bg-black">
-        <main className="flex-1 py-6 px-2 sm:px-4 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-blue-400 bg-clip-text text-transparent mb-4">
-                {title}
-              </h1>
-              <p className="text-neutral-300 text-lg">{subtitle}</p>
-            </div>
-            <PrivacyPolicy onAccept={acceptPrivacyPolicy} />
-          </div>
-        </main>
-      </div>
-    );
-  }
+  return (
+    <>
+      {children}
 
-  return <>{children}</>;
+      {/* Privacy Policy Modal */}
+      {!privacyAccepted && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="bg-neutral-900/95 rounded-2xl shadow-2xl border border-neutral-700 p-6">
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-fuchsia-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                  {title}
+                </h1>
+                <p className="text-neutral-300 text-base">{subtitle}</p>
+              </div>
+              <PrivacyPolicy onAccept={acceptPrivacyPolicy} />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default PrivacyPolicyWrapper;
