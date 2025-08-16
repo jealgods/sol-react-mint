@@ -1,12 +1,13 @@
 export const TOKEN_CONSTANTS = {
   NAME: "LongLifeCoin",
   SYMBOL: "LLC",
-  MINT_ADDRESS: "YOUR_TOKEN_MINT_ADDRESS", // Replace with your actual token mint address
+  MINT_ADDRESS: "5jk17CBDFtkHv5dJBNprpnxrbDv7eGZ7jNfoizFX2Dkv", // Replace with your actual token mint address
   TOTAL_SUPPLY: 1_000_000_000, // 10^9
   POOL_LIQUIDITY_USD: 1_000_000, // $1000
   INITIAL_PRICE_USD: 0.000001, // 10^-6 $
   TOKEN_DECIMALS: 9,
   MINIMUM_TRADE_AMOUNT: 0, // Minimum tokens per trade
+  ADMIN_WALLET_ADDRESS: "D9kkqCfnPP89H9wnPA4yoa8pGYcypwgyM8G3VRNXdnQB", // Replace with your actual admin wallet address
 };
 
 export const calculateTokenPrice = (

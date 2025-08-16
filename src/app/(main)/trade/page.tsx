@@ -1,12 +1,20 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import { TOKEN_CONSTANTS } from "@/constants/token";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import PrivacyPolicyWrapper from "@/components/PrivacyPolicyWrapper";
 import PrivacyPolicy from "@/components/PrivacyPolicy";
+import { usePoolInfo } from "@/hooks/usePoolInfo";
+import {
+  sendSolToAdmin,
+  sendLLCToAdmin,
+  checkSolBalance,
+  checkLLCBalance,
+  TransactionResult,
+} from "@/utils/solanaTransactions";
 import {
   FiPlusCircle,
   FiRepeat,
@@ -123,12 +131,15 @@ function ShareModal({
 }
 
 function TradeContent() {
-  const { publicKey, wallet } = useWallet();
+  const { publicKey, wallet, signTransaction } = useWallet();
+  const { connection } = useConnection();
   const router = useRouter();
+  const { poolInfo, loading: poolLoading, error: poolError } = usePoolInfo();
   const [tokenAmount, setTokenAmount] = useState("");
   const [usdAmount, setUsdAmount] = useState("");
+  const [solAmount, setSolAmount] = useState("");
   const [action, setAction] = useState<"buy" | "sell">("buy");
-  const [currentPrice] = useState(1.5);
+  const [currencyType, setCurrencyType] = useState<"usd" | "sol">("usd");
   const inputRef = useRef<HTMLInputElement>(null);
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -136,6 +147,19 @@ function TradeContent() {
   const [pendingTradeAction, setPendingTradeAction] = useState<
     "buy" | "sell" | null
   >(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // Safety check for wallet context initialization
+  if (!wallet) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-500 mx-auto mb-4"></div>
+          <p className="text-white">Initializing wallet...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Check session storage for privacy policy acceptance
   const checkPrivacyAccepted = () => {
@@ -159,7 +183,10 @@ function TradeContent() {
   };
 
   const executeTrade = async (tradeAction: "buy" | "sell") => {
-    if (!publicKey) return;
+    if (!publicKey || !signTransaction || !connection) {
+      alert("Wallet not connected or connection not available");
+      return;
+    }
 
     const amount = parseFloat(tokenAmount);
     if (isNaN(amount) || amount < TOKEN_CONSTANTS.MINIMUM_TRADE_AMOUNT) {
@@ -169,13 +196,78 @@ function TradeContent() {
       return;
     }
 
-    // Here you would implement the actual trade logic
-    console.log(`Executing ${tradeAction} for ${amount} tokens`);
-    alert(
-      `${tradeAction.toUpperCase()} order placed for ${amount} ${
-        TOKEN_CONSTANTS.SYMBOL
-      }`
-    );
+    setIsProcessing(true);
+
+    try {
+      let result: TransactionResult;
+
+      if (tradeAction === "buy") {
+        // For buy: send SOL to admin wallet
+        const solAmountToSend = parseFloat(solAmount);
+
+        // Check if user has enough SOL balance
+        const hasEnoughSol = await checkSolBalance(
+          connection,
+          publicKey,
+          solAmountToSend
+        );
+        if (!hasEnoughSol) {
+          alert("Insufficient SOL balance for this transaction");
+          return;
+        }
+
+        result = await sendSolToAdmin(
+          connection,
+          publicKey,
+          solAmountToSend,
+          signTransaction
+        );
+      } else {
+        // For sell: send LLC tokens to admin wallet
+        const llcAmountToSend = parseFloat(tokenAmount);
+
+        // Check if user has enough LLC balance
+        const hasEnoughLLC = await checkLLCBalance(
+          connection,
+          publicKey,
+          llcAmountToSend
+        );
+        if (!hasEnoughLLC) {
+          alert("Insufficient LLC token balance for this transaction");
+          return;
+        }
+
+        result = await sendLLCToAdmin(
+          connection,
+          publicKey,
+          llcAmountToSend,
+          signTransaction
+        );
+      }
+
+      if (result.success) {
+        alert(
+          `${tradeAction.toUpperCase()} transaction successful!\nTransaction signature: ${
+            result.signature
+          }`
+        );
+        // Clear form after successful transaction
+        setTokenAmount("");
+        setUsdAmount("");
+        setSolAmount("");
+      } else {
+        alert(`Transaction failed: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Trade execution error:", error);
+      alert(
+        `Transaction failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleTrade = async () => {
@@ -192,14 +284,45 @@ function TradeContent() {
     executeTrade(action);
   };
 
-  const updateAmounts = (value: string, type: "token" | "usd") => {
+  const updateAmounts = (value: string, type: "token" | "currency") => {
     const numValue = parseFloat(value) || 0;
+
+    // Use real prices from pool info
+    const llcPriceUSD = poolInfo?.llcPriceUSD || 0;
+    const llcPriceSOL = poolInfo?.llcPriceSOL || 0;
+
     if (type === "token") {
       setTokenAmount(value);
-      setUsdAmount((numValue * currentPrice).toFixed(2));
+      // Calculate both USD and SOL amounts using real LLC prices
+      setUsdAmount((numValue * llcPriceUSD).toFixed(6));
+      setSolAmount((numValue * llcPriceSOL).toFixed(9));
     } else {
-      setUsdAmount(value);
-      setTokenAmount((numValue / currentPrice).toFixed(2));
+      // Handle currency input (USD or SOL)
+      if (currencyType === "usd") {
+        setUsdAmount(value);
+        // Calculate token amount using real LLC price
+        setTokenAmount(
+          llcPriceUSD > 0 ? (numValue / llcPriceUSD).toFixed(2) : "0"
+        );
+        // Calculate SOL amount
+        setSolAmount(
+          llcPriceUSD > 0
+            ? ((numValue / llcPriceUSD) * llcPriceSOL).toFixed(9)
+            : "0"
+        );
+      } else {
+        setSolAmount(value);
+        // Calculate token amount using real LLC price
+        setTokenAmount(
+          llcPriceSOL > 0 ? (numValue / llcPriceSOL).toFixed(2) : "0"
+        );
+        // Calculate USD amount
+        setUsdAmount(
+          llcPriceSOL > 0
+            ? ((numValue / llcPriceSOL) * llcPriceUSD).toFixed(6)
+            : "0"
+        );
+      }
     }
   };
 
@@ -377,14 +500,31 @@ function TradeContent() {
                     <span className="text-xs text-neutral-400 mb-1">
                       Current Price
                     </span>
-                    <span className="text-xl text-white">${currentPrice}</span>
+                    <span className="text-xl text-white">
+                      {poolLoading ? (
+                        "Loading..."
+                      ) : (
+                        <>
+                          {poolInfo?.llcPriceSOL
+                            ? `${poolInfo.llcPriceSOL.toFixed(9)} SOL`
+                            : "N/A"}
+                          <br />
+                          <span className="text-sm text-neutral-400">
+                            $
+                            {poolInfo?.llcPriceUSD
+                              ? poolInfo.llcPriceUSD.toFixed(6)
+                              : "N/A"}
+                          </span>
+                        </>
+                      )}
+                    </span>
                   </div>
                   <div className="flex flex-col justify-start items-start bg-neutral-900 p-4 rounded-2xl border border-neutral-800 shadow-lg min-h-[90px]">
                     <span className="text-xs text-neutral-400 mb-1">
                       Total Supply
                     </span>
                     <span className="text-xl text-white">
-                      {TOKEN_CONSTANTS.TOTAL_SUPPLY.toLocaleString()}{" "}
+                      {poolInfo?.llcBalance?.toLocaleString() || "Loading..."}{" "}
                       {TOKEN_CONSTANTS.SYMBOL}
                     </span>
                   </div>
@@ -393,7 +533,24 @@ function TradeContent() {
                       Pool Liquidity
                     </span>
                     <span className="text-xl text-white">
-                      ${TOKEN_CONSTANTS.POOL_LIQUIDITY_USD.toLocaleString()}
+                      {poolLoading ? (
+                        "Loading..."
+                      ) : (
+                        <>
+                          {poolInfo?.solBalance
+                            ? `${poolInfo.solBalance.toFixed(4)} SOL`
+                            : "N/A"}
+                          <br />
+                          <span className="text-sm text-neutral-400">
+                            $
+                            {poolInfo?.solBalance && poolInfo?.solPriceUSD
+                              ? (
+                                  poolInfo.solBalance * poolInfo.solPriceUSD
+                                ).toFixed(2)
+                              : "N/A"}
+                          </span>
+                        </>
+                      )}
                     </span>
                   </div>
                 </div>
@@ -452,21 +609,62 @@ function TradeContent() {
                         placeholder="0.00"
                         className="w-full p-3 text-base border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:border-fuchsia-500 focus:ring-0 focus:outline-none transition-all duration-200 hide-number-spin"
                       />
-                      <p className="text-xs text-neutral-400 mt-1">
-                        ${usdAmount} USD
-                      </p>
+                      <div className="flex justify-between text-xs text-neutral-400 mt-1">
+                        <span>${usdAmount} USD</span>
+                        <span>{solAmount} SOL</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Currency Type Toggle */}
+                  <div className="flex justify-center">
+                    <div className="relative flex bg-neutral-900 rounded-full p-1 border border-neutral-800">
+                      <span
+                        className={`absolute top-1 left-1 h-[calc(100%-0.5rem)] w-1/2 rounded-full transition-all duration-300 z-0
+                           ${
+                             currencyType === "usd"
+                               ? "bg-gradient-to-r from-blue-500 to-cyan-500"
+                               : "translate-x-full bg-gradient-to-r from-orange-500 to-yellow-500"
+                           }`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setCurrencyType("usd")}
+                        className={`flex-1 z-10 relative py-2 px-4 rounded-full text-sm font-bold transition-all duration-200
+                           ${
+                             currencyType === "usd"
+                               ? "text-white"
+                               : "text-blue-400 hover:text-white"
+                           }`}
+                      >
+                        USD
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCurrencyType("sol")}
+                        className={`flex-1 z-10 relative py-2 px-4 rounded-full text-sm font-bold transition-all duration-200
+                           ${
+                             currencyType === "sol"
+                               ? "text-white"
+                               : "text-orange-400 hover:text-white"
+                           }`}
+                      >
+                        SOL
+                      </button>
                     </div>
                   </div>
 
                   <div className="space-y-1">
                     <label className="block text-xs font-semibold text-neutral-400 mb-1">
-                      Amount (USD)
+                      Amount ({currencyType.toUpperCase()})
                     </label>
                     <div className="relative">
                       <input
                         type="number"
-                        value={usdAmount}
-                        onChange={(e) => updateAmounts(e.target.value, "usd")}
+                        value={currencyType === "usd" ? usdAmount : solAmount}
+                        onChange={(e) =>
+                          updateAmounts(e.target.value, "currency")
+                        }
                         placeholder="0.00"
                         className="w-full p-3 text-base border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:border-blue-500 focus:ring-0 focus:outline-none transition-all duration-200"
                       />
@@ -478,14 +676,23 @@ function TradeContent() {
 
                   <button
                     onClick={handleTrade}
-                    disabled={!publicKey || !tokenAmount}
+                    disabled={!publicKey || !tokenAmount || isProcessing}
                     className={`w-full py-3 rounded-lg text-base font-bold transition-all duration-200 mt-2 shadow-lg ${
                       action === "buy"
                         ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
                         : "bg-gradient-to-r from-fuchsia-500 to-blue-500 hover:from-fuchsia-600 hover:to-blue-600"
-                    } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+                    } text-white disabled:opacity-50 disabled:cursor-not-allowed relative`}
                   >
-                    {action === "buy" ? "Buy" : "Sell"} {TOKEN_CONSTANTS.SYMBOL}
+                    {isProcessing ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        Processing...
+                      </div>
+                    ) : (
+                      `${action === "buy" ? "Buy" : "Sell"} ${
+                        TOKEN_CONSTANTS.SYMBOL
+                      }`
+                    )}
                   </button>
 
                   {!publicKey && (
