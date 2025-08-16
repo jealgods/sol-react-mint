@@ -134,7 +134,7 @@ function TradeContent() {
   const { publicKey, wallet, signTransaction } = useWallet();
   const { connection } = useConnection();
   const router = useRouter();
-  const { poolInfo, loading: poolLoading, error: poolError } = usePoolInfo();
+  const { poolInfo, loading: poolLoading } = usePoolInfo();
   const [tokenAmount, setTokenAmount] = useState("");
   const [usdAmount, setUsdAmount] = useState("");
   const [solAmount, setSolAmount] = useState("");
@@ -148,18 +148,6 @@ function TradeContent() {
     "buy" | "sell" | null
   >(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  // Safety check for wallet context initialization
-  if (!wallet) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-500 mx-auto mb-4"></div>
-          <p className="text-white">Initializing wallet...</p>
-        </div>
-      </div>
-    );
-  }
 
   // Check session storage for privacy policy acceptance
   const checkPrivacyAccepted = () => {
@@ -181,6 +169,41 @@ function TradeContent() {
       setPendingTradeAction(null);
     }
   };
+
+  useEffect(() => {
+    const handleError = (error: unknown) => {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "name" in error &&
+        "message" in error &&
+        (error as { name: string }).name === "WalletConnectionError" &&
+        (error as { message: string }).message.includes("User rejected")
+      ) {
+        alert("You cancelled the wallet connection.");
+      }
+    };
+
+    const adapter = wallet?.adapter;
+    if (adapter) {
+      adapter.on("error", handleError);
+      return () => {
+        adapter.off("error", handleError);
+      };
+    }
+  }, [wallet]);
+
+  // Safety check for wallet context initialization
+  if (!wallet) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-500 mx-auto mb-4"></div>
+          <p className="text-white">Initializing wallet...</p>
+        </div>
+      </div>
+    );
+  }
 
   const executeTrade = async (tradeAction: "buy" | "sell") => {
     if (!publicKey || !signTransaction || !connection) {
@@ -325,29 +348,6 @@ function TradeContent() {
       }
     }
   };
-
-  useEffect(() => {
-    const handleError = (error: unknown) => {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "name" in error &&
-        "message" in error &&
-        (error as { name: string }).name === "WalletConnectionError" &&
-        (error as { message: string }).message.includes("User rejected")
-      ) {
-        alert("You cancelled the wallet connection.");
-      }
-    };
-
-    const adapter = wallet?.adapter;
-    if (adapter) {
-      adapter.on("error", handleError);
-      return () => {
-        adapter.off("error", handleError);
-      };
-    }
-  }, [wallet]);
 
   return (
     <div className="min-h-screen flex flex-col bg-black">
