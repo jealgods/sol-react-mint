@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 interface PoolInfo {
   solBalance: number;
   llcBalance: number;
-  llcPriceSOL: number;
-  llcPriceUSD: number;
-  solPriceUSD: number;
+  llcPrice: number; // This is the price in SOL
+  timestamp: string;
   autoSwapEnabled: boolean;
+  description: string;
 }
 
 export const usePoolInfo = () => {
@@ -18,7 +18,9 @@ export const usePoolInfo = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch("/api/wallet/pool-info");
+      const response = await fetch(
+        "https://longlifecoin.com/api/wallet/pool-info"
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch pool info");
