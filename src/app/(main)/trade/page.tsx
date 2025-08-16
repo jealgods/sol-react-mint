@@ -311,10 +311,8 @@ function TradeContent() {
     const numValue = parseFloat(value) || 0;
 
     // Use real prices from pool info
-    const llcPriceSOL = poolInfo?.llcPrice || 0;
-    // Estimate USD price based on SOL price (assuming 1 SOL ≈ $100 for now)
-    const estimatedSolPriceUSD = 100; // This should be fetched from a price API
-    const llcPriceUSD = llcPriceSOL * estimatedSolPriceUSD;
+    const llcPriceSOL = poolInfo?.llcPriceSOL || 0;
+    const llcPriceUSD = poolInfo?.llcPriceUSD || 0;
 
     if (type === "token") {
       setTokenAmount(value);
@@ -507,14 +505,14 @@ function TradeContent() {
                         "Loading..."
                       ) : (
                         <>
-                          {poolInfo?.llcPrice
-                            ? `${poolInfo.llcPrice.toFixed(9)} SOL`
+                          {poolInfo?.llcPriceSOL
+                            ? `${poolInfo.llcPriceSOL.toFixed(9)} SOL`
                             : "N/A"}
                           <br />
                           <span className="text-sm text-neutral-400">
                             $
-                            {poolInfo?.llcPrice
-                              ? (poolInfo.llcPrice * 100).toFixed(6)
+                            {poolInfo?.llcPriceUSD
+                              ? poolInfo.llcPriceUSD.toFixed(6)
                               : "N/A"}
                           </span>
                         </>
@@ -545,8 +543,10 @@ function TradeContent() {
                           <br />
                           <span className="text-sm text-neutral-400">
                             $
-                            {poolInfo?.solBalance
-                              ? (poolInfo.solBalance * 100).toFixed(2)
+                            {poolInfo?.solBalance && poolInfo?.solPriceUSD
+                              ? (
+                                  poolInfo.solBalance * poolInfo.solPriceUSD
+                                ).toFixed(2)
                               : "N/A"}
                           </span>
                         </>

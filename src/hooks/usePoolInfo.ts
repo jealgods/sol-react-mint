@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 interface PoolInfo {
   solBalance: number;
   llcBalance: number;
-  llcPrice: number; // This is the price in SOL
-  timestamp: string;
+  llcPriceSOL: number; // Price in SOL
+  llcPriceUSD: number; // Price in USD
+  solPriceUSD: number; // SOL price in USD
   autoSwapEnabled: boolean;
-  description: string;
 }
 
 export const usePoolInfo = () => {
