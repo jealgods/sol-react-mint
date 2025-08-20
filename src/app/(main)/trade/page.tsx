@@ -193,17 +193,8 @@ function TradeContent() {
     }
   }, [wallet]);
 
-  // Safety check for wallet context initialization
-  if (!wallet) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-500 mx-auto mb-4"></div>
-          <p className="text-white">Initializing wallet...</p>
-        </div>
-      </div>
-    );
-  }
+  // Remove the wallet check that shows loading state
+  // The UI should be visible even without a connected wallet
 
   const executeTrade = async (tradeAction: "buy" | "sell") => {
     if (!publicKey || !signTransaction || !connection) {
@@ -678,7 +669,9 @@ function TradeContent() {
                     onClick={handleTrade}
                     disabled={!publicKey || !tokenAmount || isProcessing}
                     className={`w-full py-3 rounded-lg text-base font-bold transition-all duration-200 mt-2 shadow-lg ${
-                      action === "buy"
+                      !publicKey
+                        ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+                        : action === "buy"
                         ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
                         : "bg-gradient-to-r from-fuchsia-500 to-blue-500 hover:from-fuchsia-600 hover:to-blue-600"
                     } text-white disabled:opacity-50 disabled:cursor-not-allowed relative`}
@@ -688,6 +681,8 @@ function TradeContent() {
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                         Processing...
                       </div>
+                    ) : !publicKey ? (
+                      "Select Wallet to Trade"
                     ) : (
                       `${action === "buy" ? "Buy" : "Sell"} ${
                         TOKEN_CONSTANTS.SYMBOL
@@ -696,10 +691,10 @@ function TradeContent() {
                   </button>
 
                   {!publicKey && (
-                    <div className="mt-3 p-3 bg-gradient-to-r from-yellow-700/80 to-yellow-900/80 border border-yellow-800 rounded-lg">
-                      <p className="text-xs text-yellow-200 text-center font-semibold">
-                        <span className="font-bold">Wallet not connected</span>{" "}
-                        – Please connect your wallet to start trading
+                    <div className="mt-3 p-3 bg-gradient-to-r from-purple-700/80 to-purple-900/80 border border-purple-800 rounded-lg">
+                      <p className="text-sm text-purple-200 text-center font-semibold">
+                        <span className="font-bold">Connect your wallet</span>{" "}
+                        to start trading {TOKEN_CONSTANTS.SYMBOL}
                       </p>
                     </div>
                   )}
