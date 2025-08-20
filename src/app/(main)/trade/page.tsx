@@ -341,12 +341,12 @@ function TradeContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black">
-      <main className="flex-1 py-6 px-2 sm:px-4 lg:px-8">
-        <div className="w-full">
-          {/* Action Buttons Grid */}
-
-          <div className="relative h-[400px] md:h-[600px] w-full rounded-lg bg-black shadow-2xl border border-neutral-800">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-black via-neutral-900 to-black">
+      <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl mx-auto space-y-8">
+          {/* Chart Section */}
+          <div className="relative h-[280px] md:h-[380px] w-full max-w-5xl mx-auto rounded-3xl bg-gradient-to-br from-neutral-900 to-black shadow-2xl border border-neutral-800 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/10 to-blue-500/10 pointer-events-none"></div>
             <TradingViewWidget
               symbol={"COINBASE:SOLUSD"}
               theme={"dark"}
@@ -355,12 +355,14 @@ function TradeContent() {
               width="100%"
             />
           </div>
-          <div className="w-full max-w-2xl mx-auto my-10">
+
+          {/* Action Buttons Grid */}
+          <div className="w-full max-w-3xl mx-auto">
             <div className="grid grid-cols-4 gap-y-8 gap-x-4 sm:gap-x-8">
               {/* Buy */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center group">
                 <button
-                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 border-2 border-emerald-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-emerald-300/50"
                   onClick={() => {
                     setAction("buy");
                     document
@@ -368,49 +370,49 @@ function TradeContent() {
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
-                  <FiPlusCircle size={32} />
+                  <FiPlusCircle size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-emerald-300 transition-colors">
                   Buy
                 </span>
               </div>
               {/* Swap */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center group">
                 <button
-                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 border-2 border-blue-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-blue-300/50"
                   onClick={() => router.push("/swap")}
                 >
-                  <FiRepeat size={32} />
+                  <FiRepeat size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-blue-300 transition-colors">
                   Swap
                 </span>
               </div>
               {/* Bridge */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center group">
                 <button
-                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 border-2 border-purple-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-purple-300/50"
                   onClick={() => router.push("/bridge")}
                 >
-                  <GiBridge size={32} />
+                  <GiBridge size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-purple-300 transition-colors">
                   Bridge
                 </span>
               </div>
               {/* Cash out */}
-              <div className="flex flex-col items-center">
-                <button className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all">
-                  <MdOutlineAtm size={32} />
+              <div className="flex flex-col items-center group">
+                <button className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 border-2 border-orange-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-orange-300/50">
+                  <MdOutlineAtm size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-orange-300 transition-colors">
                   Cash out
                 </span>
               </div>
               {/* Send */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center group">
                 <button
-                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-pink-600 border-2 border-fuchsia-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-fuchsia-300/50"
                   onClick={() => {
                     setAction("sell");
                     document
@@ -418,51 +420,61 @@ function TradeContent() {
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
-                  <FiArrowUpCircle size={32} />
+                  <FiArrowUpCircle size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-fuchsia-300 transition-colors">
                   Send
                 </span>
               </div>
               {/* Receive */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center group">
                 <button
-                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  className={`w-16 h-16 flex items-center justify-center rounded-2xl border-2 mb-3 shadow-xl transition-all duration-300 group-hover:scale-105 ${
+                    publicKey
+                      ? "bg-gradient-to-br from-green-500 to-emerald-600 border-green-400/30 text-white hover:shadow-2xl group-hover:border-green-300/50"
+                      : "bg-gradient-to-br from-neutral-700 to-neutral-800 border-neutral-600/30 text-neutral-400 cursor-not-allowed"
+                  }`}
                   onClick={() => publicKey && setShowWalletModal(true)}
                   disabled={!publicKey}
                 >
-                  <FiArrowDownCircle size={32} />
+                  <FiArrowDownCircle size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span
+                  className={`text-sm font-semibold transition-colors ${
+                    publicKey
+                      ? "text-neutral-200 group-hover:text-green-300"
+                      : "text-neutral-500"
+                  }`}
+                >
                   Receive
                 </span>
               </div>
               {/* Text send */}
-              <div className="flex flex-col items-center">
-                <button className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all">
-                  <FiMessageCircle size={32} />
+              <div className="flex flex-col items-center group">
+                <button className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 border-2 border-yellow-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-yellow-300/50">
+                  <FiMessageCircle size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-yellow-300 transition-colors">
                   Text send
                 </span>
               </div>
               {/* Share */}
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center group">
                 <button
-                  className="w-16 h-16 flex items-center justify-center rounded-full bg-neutral-800 border-2 border-neutral-700 text-white mb-2 shadow-lg hover:bg-neutral-700 transition-all"
+                  className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-indigo-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-indigo-300/50"
                   onClick={() => setShowShareModal(true)}
                 >
-                  <FiShare2 size={32} />
+                  <FiShare2 size={28} />
                 </button>
-                <span className="text-sm text-neutral-200 font-medium mt-1">
+                <span className="text-sm text-neutral-200 font-semibold group-hover:text-indigo-300 transition-colors">
                   Share
                 </span>
               </div>
             </div>
           </div>
           {/* Trade Form Section */}
-          <div className="mt-6 bg-black/90 rounded-2xl shadow-2xl p-6 sm:p-10 border border-neutral-800">
-            <div className="bg-black/95 rounded-2xl shadow-lg p-6 sm:p-8">
+          <div className="w-full max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-neutral-900/95 to-black/95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8 border border-neutral-800/50">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 mb-8">
                 <div className="flex items-center gap-4">
                   <div className="bg-gradient-to-br from-blue-600 via-violet-700 to-fuchsia-600 p-2 rounded-full shadow-lg">
@@ -486,21 +498,21 @@ function TradeContent() {
               </div>
 
               <div className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="flex flex-col justify-start items-start bg-neutral-900 p-4 rounded-2xl border border-neutral-800 shadow-lg min-h-[90px]">
-                    <span className="text-xs text-neutral-400 mb-1">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="flex flex-col justify-start items-start bg-gradient-to-br from-emerald-900/50 to-teal-900/50 p-6 rounded-2xl border border-emerald-800/30 shadow-xl min-h-[100px] backdrop-blur-sm">
+                    <span className="text-xs text-emerald-300 mb-2 font-semibold uppercase tracking-wide">
                       Current Price
                     </span>
-                    <span className="text-xl text-white">
+                    <span className="text-xl text-white font-bold">
                       {poolLoading ? (
-                        "Loading..."
+                        <div className="animate-pulse bg-neutral-700 h-6 w-24 rounded"></div>
                       ) : (
                         <>
                           {poolInfo?.llcPriceSOL
                             ? `${poolInfo.llcPriceSOL.toFixed(9)} SOL`
                             : "N/A"}
                           <br />
-                          <span className="text-sm text-neutral-400">
+                          <span className="text-sm text-emerald-300 font-medium">
                             $
                             {poolInfo?.llcPriceUSD
                               ? poolInfo.llcPriceUSD.toFixed(6)
@@ -510,29 +522,31 @@ function TradeContent() {
                       )}
                     </span>
                   </div>
-                  <div className="flex flex-col justify-start items-start bg-neutral-900 p-4 rounded-2xl border border-neutral-800 shadow-lg min-h-[90px]">
-                    <span className="text-xs text-neutral-400 mb-1">
+                  <div className="flex flex-col justify-start items-start bg-gradient-to-br from-blue-900/50 to-cyan-900/50 p-6 rounded-2xl border border-blue-800/30 shadow-xl min-h-[100px] backdrop-blur-sm">
+                    <span className="text-xs text-blue-300 mb-2 font-semibold uppercase tracking-wide">
                       Total Supply
                     </span>
-                    <span className="text-xl text-white">
-                      {poolInfo?.llcBalance?.toLocaleString() || "Loading..."}{" "}
+                    <span className="text-xl text-white font-bold">
+                      {poolInfo?.llcBalance?.toLocaleString() || (
+                        <div className="animate-pulse bg-neutral-700 h-6 w-20 rounded"></div>
+                      )}{" "}
                       {TOKEN_CONSTANTS.SYMBOL}
                     </span>
                   </div>
-                  <div className="flex flex-col justify-start items-start bg-neutral-900 p-4 rounded-2xl border border-neutral-800 shadow-lg min-h-[90px]">
-                    <span className="text-xs text-neutral-400 mb-1">
+                  <div className="flex flex-col justify-start items-start bg-gradient-to-br from-purple-900/50 to-fuchsia-900/50 p-6 rounded-2xl border border-purple-800/30 shadow-xl min-h-[100px] backdrop-blur-sm">
+                    <span className="text-xs text-purple-300 mb-2 font-semibold uppercase tracking-wide">
                       Pool Liquidity
                     </span>
-                    <span className="text-xl text-white">
+                    <span className="text-xl text-white font-bold">
                       {poolLoading ? (
-                        "Loading..."
+                        <div className="animate-pulse bg-neutral-700 h-6 w-20 rounded"></div>
                       ) : (
                         <>
                           {poolInfo?.solBalance
                             ? `${poolInfo.solBalance.toFixed(4)} SOL`
                             : "N/A"}
                           <br />
-                          <span className="text-sm text-neutral-400">
+                          <span className="text-sm text-purple-300 font-medium">
                             $
                             {poolInfo?.solBalance && poolInfo?.solPriceUSD
                               ? (
@@ -549,10 +563,10 @@ function TradeContent() {
                 {/* Buy/Sell Toggle */}
                 <div
                   id="trade-toggle"
-                  className="relative flex w-full max-w-xs mx-auto bg-neutral-900 rounded-full p-1 mb-2 border border-neutral-800"
+                  className="relative flex w-full max-w-sm mx-auto bg-neutral-900/80 backdrop-blur-sm rounded-2xl p-1.5 mb-4 border border-neutral-800/50 shadow-xl"
                 >
                   <span
-                    className={`absolute top-1 left-1 h-[calc(100%-0.5rem)] w-1/2 rounded-full transition-all duration-300 z-0
+                    className={`absolute top-1.5 left-1.5 h-[calc(100%-0.75rem)] w-1/2 rounded-xl transition-all duration-300 z-0 shadow-lg
                       ${
                         action === "buy"
                           ? "bg-gradient-to-r from-emerald-500 to-teal-500"
@@ -562,7 +576,7 @@ function TradeContent() {
                   <button
                     type="button"
                     onClick={() => setAction("buy")}
-                    className={`flex-1 z-10 relative py-2 rounded-full text-base font-bold transition-all duration-200
+                    className={`flex-1 z-10 relative py-3 px-6 rounded-xl text-base font-bold transition-all duration-200
                       ${
                         action === "buy"
                           ? "text-white"
@@ -574,7 +588,7 @@ function TradeContent() {
                   <button
                     type="button"
                     onClick={() => setAction("sell")}
-                    className={`flex-1 z-10 relative py-2 rounded-full text-base font-bold transition-all duration-200
+                    className={`flex-1 z-10 relative py-3 px-6 rounded-xl text-base font-bold transition-all duration-200
                       ${
                         action === "sell"
                           ? "text-white"
@@ -587,8 +601,8 @@ function TradeContent() {
 
                 {/* Amount Inputs */}
                 <div className="space-y-5">
-                  <div className="space-y-1">
-                    <label className="block text-xs font-semibold text-neutral-400 mb-1">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-neutral-300 mb-2">
                       Amount ({TOKEN_CONSTANTS.SYMBOL})
                     </label>
                     <div className="relative group">
@@ -598,20 +612,24 @@ function TradeContent() {
                         value={tokenAmount}
                         onChange={(e) => updateAmounts(e.target.value, "token")}
                         placeholder="0.00"
-                        className="w-full p-3 text-base border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:border-fuchsia-500 focus:ring-0 focus:outline-none transition-all duration-200 hide-number-spin"
+                        className="w-full p-4 text-lg border border-neutral-700 rounded-2xl bg-neutral-900/80 backdrop-blur-sm text-white placeholder-neutral-500 focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/20 focus:outline-none transition-all duration-300 hide-number-spin shadow-lg"
                       />
-                      <div className="flex justify-between text-xs text-neutral-400 mt-1">
-                        <span>${usdAmount} USD</span>
-                        <span>{solAmount} SOL</span>
+                      <div className="flex justify-between text-xs text-neutral-400 mt-2 px-1">
+                        <span className="bg-neutral-800/50 px-2 py-1 rounded-lg">
+                          ${usdAmount} USD
+                        </span>
+                        <span className="bg-neutral-800/50 px-2 py-1 rounded-lg">
+                          {solAmount} SOL
+                        </span>
                       </div>
                     </div>
                   </div>
 
                   {/* Currency Type Toggle */}
                   <div className="flex justify-center">
-                    <div className="relative flex bg-neutral-900 rounded-full p-1 border border-neutral-800">
+                    <div className="relative flex bg-neutral-900/80 backdrop-blur-sm rounded-2xl p-1.5 border border-neutral-800/50 shadow-lg">
                       <span
-                        className={`absolute top-1 left-1 h-[calc(100%-0.5rem)] w-1/2 rounded-full transition-all duration-300 z-0
+                        className={`absolute top-1.5 left-1.5 h-[calc(100%-0.75rem)] w-1/2 rounded-xl transition-all duration-300 z-0 shadow-lg
                            ${
                              currencyType === "usd"
                                ? "bg-gradient-to-r from-blue-500 to-cyan-500"
@@ -621,7 +639,7 @@ function TradeContent() {
                       <button
                         type="button"
                         onClick={() => setCurrencyType("usd")}
-                        className={`flex-1 z-10 relative py-2 px-4 rounded-full text-sm font-bold transition-all duration-200
+                        className={`flex-1 z-10 relative py-2.5 px-6 rounded-xl text-sm font-bold transition-all duration-200
                            ${
                              currencyType === "usd"
                                ? "text-white"
@@ -633,7 +651,7 @@ function TradeContent() {
                       <button
                         type="button"
                         onClick={() => setCurrencyType("sol")}
-                        className={`flex-1 z-10 relative py-2 px-4 rounded-full text-sm font-bold transition-all duration-200
+                        className={`flex-1 z-10 relative py-2.5 px-6 rounded-xl text-sm font-bold transition-all duration-200
                            ${
                              currencyType === "sol"
                                ? "text-white"
@@ -645,8 +663,8 @@ function TradeContent() {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="block text-xs font-semibold text-neutral-400 mb-1">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-neutral-300 mb-2">
                       Amount ({currencyType.toUpperCase()})
                     </label>
                     <div className="relative">
@@ -657,10 +675,12 @@ function TradeContent() {
                           updateAmounts(e.target.value, "currency")
                         }
                         placeholder="0.00"
-                        className="w-full p-3 text-base border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:border-blue-500 focus:ring-0 focus:outline-none transition-all duration-200"
+                        className="w-full p-4 text-lg border border-neutral-700 rounded-2xl bg-neutral-900/80 backdrop-blur-sm text-white placeholder-neutral-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all duration-300 shadow-lg"
                       />
-                      <p className="text-xs text-neutral-400 mt-1">
-                        {tokenAmount} {TOKEN_CONSTANTS.SYMBOL}
+                      <p className="text-xs text-neutral-400 mt-2 px-1">
+                        <span className="bg-neutral-800/50 px-2 py-1 rounded-lg">
+                          {tokenAmount} {TOKEN_CONSTANTS.SYMBOL}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -668,17 +688,17 @@ function TradeContent() {
                   <button
                     onClick={handleTrade}
                     disabled={!publicKey || !tokenAmount || isProcessing}
-                    className={`w-full py-3 rounded-lg text-base font-bold transition-all duration-200 mt-2 shadow-lg ${
+                    className={`w-full py-4 rounded-2xl text-lg font-bold transition-all duration-300 mt-4 shadow-2xl hover:shadow-3xl hover:scale-[1.02] ${
                       !publicKey
                         ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
                         : action === "buy"
                         ? "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
                         : "bg-gradient-to-r from-fuchsia-500 to-blue-500 hover:from-fuchsia-600 hover:to-blue-600"
-                    } text-white disabled:opacity-50 disabled:cursor-not-allowed relative`}
+                    } text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative`}
                   >
                     {isProcessing ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
                         Processing...
                       </div>
                     ) : !publicKey ? (
@@ -691,7 +711,7 @@ function TradeContent() {
                   </button>
 
                   {!publicKey && (
-                    <div className="mt-3 p-3 bg-gradient-to-r from-purple-700/80 to-purple-900/80 border border-purple-800 rounded-lg">
+                    <div className="mt-4 p-4 bg-gradient-to-r from-purple-700/80 to-purple-900/80 border border-purple-800/50 rounded-2xl backdrop-blur-sm">
                       <p className="text-sm text-purple-200 text-center font-semibold">
                         <span className="font-bold">Connect your wallet</span>{" "}
                         to start trading {TOKEN_CONSTANTS.SYMBOL}
