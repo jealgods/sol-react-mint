@@ -423,7 +423,7 @@ function TradeContent() {
                   <FiArrowUpCircle size={28} />
                 </button>
                 <span className="text-sm text-neutral-200 font-semibold group-hover:text-fuchsia-300 transition-colors">
-                  Send
+                  Sell
                 </span>
               </div>
               {/* Receive */}
