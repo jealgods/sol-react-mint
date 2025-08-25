@@ -130,6 +130,101 @@ function ShareModal({
   );
 }
 
+function TextSendModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [message, setMessage] = useState("");
+  const [recipient, setRecipient] = useState("");
+  const [isSending, setIsSending] = useState(false);
+
+  const handleSend = async () => {
+    if (!message.trim() || !recipient.trim()) {
+      alert("Please fill in both message and recipient fields");
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      // Here you would typically send the message to your backend
+      // For now, we'll simulate a successful send
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      alert("Message sent successfully!");
+      setMessage("");
+      setRecipient("");
+      onClose();
+    } catch (error) {
+      alert("Failed to send message. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-neutral-900 rounded-2xl shadow-2xl w-full max-w-md p-6 relative border border-neutral-700">
+        <button
+          className="absolute top-4 right-4 text-neutral-400 hover:text-yellow-400"
+          onClick={onClose}
+        >
+          ×
+        </button>
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <FiMessageCircle className="text-yellow-400" />
+          Send Message
+        </h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-300 mb-2">
+              Recipient Address
+            </label>
+            <input
+              type="text"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+              placeholder="Enter wallet address or username"
+              className="w-full px-4 py-3 bg-neutral-800 border border-neutral-600 rounded-lg text-white placeholder-neutral-400 focus:outline-none focus:border-yellow-400 transition-colors"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-neutral-300 mb-2">
+              Message
+            </label>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Enter your message here..."
+              rows={4}
+              className="w-full px-4 py-3 bg-neutral-800 border border-neutral-600 rounded-lg text-white placeholder-neutral-400 focus:outline-none focus:border-yellow-400 transition-colors resize-none"
+            />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={onClose}
+              className="flex-1 px-4 py-3 rounded-lg bg-neutral-700 text-white font-medium hover:bg-neutral-600 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSend}
+              disabled={isSending || !message.trim() || !recipient.trim()}
+              className="flex-1 px-4 py-3 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-600 text-white font-medium hover:from-yellow-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+            >
+              {isSending ? "Sending..." : "Send Message"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TradeContent() {
   const { publicKey, wallet, signTransaction } = useWallet();
   const { connection } = useConnection();
@@ -144,6 +239,7 @@ function TradeContent() {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showTextSendModal, setShowTextSendModal] = useState(false);
   const [pendingTradeAction, setPendingTradeAction] = useState<
     "buy" | "sell" | null
   >(null);
@@ -451,7 +547,10 @@ function TradeContent() {
               </div>
               {/* Text send */}
               <div className="flex flex-col items-center group">
-                <button className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 border-2 border-yellow-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-yellow-300/50">
+                <button
+                  className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 border-2 border-yellow-400/30 text-white mb-3 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group-hover:border-yellow-300/50"
+                  onClick={() => setShowTextSendModal(true)}
+                >
                   <FiMessageCircle size={28} />
                 </button>
                 <span className="text-sm text-neutral-200 font-semibold group-hover:text-yellow-300 transition-colors">
@@ -735,6 +834,11 @@ function TradeContent() {
         open={showShareModal}
         onClose={() => setShowShareModal(false)}
         url={typeof window !== "undefined" ? window.location.href : ""}
+      />
+      {/* Text Send Modal */}
+      <TextSendModal
+        open={showTextSendModal}
+        onClose={() => setShowTextSendModal(false)}
       />
       {/* Privacy Policy Modal for Trading */}
       {showPrivacyModal && (
