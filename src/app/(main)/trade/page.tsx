@@ -571,6 +571,158 @@ function TradeContent() {
               </div>
             </div>
           </div>
+
+          {/* Whitepaper Section */}
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="bg-gradient-to-br from-neutral-900/95 to-black/95 backdrop-blur-xl rounded-2xl shadow-xl p-4 sm:p-6 border border-neutral-800/50">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-2 rounded-full shadow-lg">
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                    Project Whitepaper
+                  </h2>
+                  <p className="text-xs text-neutral-400">
+                    Learn about our vision and technology
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* PDF Actions */}
+                <div className="bg-gradient-to-br from-neutral-800/50 to-neutral-900/50 rounded-xl p-4 border border-neutral-700/50">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="bg-red-500 p-1.5 rounded-lg">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-white">
+                        Whitepaper.pdf
+                      </h3>
+                      <p className="text-xs text-neutral-400">6.8 MB • PDF</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => window.open("/whitepaper.pdf", "_blank")}
+                      className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-sm font-bold py-2 px-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-1"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                      View
+                    </button>
+                    <button
+                      onClick={() => {
+                        const link = document.createElement("a");
+                        link.href = "/whitepaper.pdf";
+                        link.download = "whitepaper.pdf";
+                        link.click();
+                      }}
+                      className="flex-1 bg-gradient-to-r from-neutral-700 to-neutral-800 hover:from-neutral-600 hover:to-neutral-700 text-white text-sm font-bold py-2 px-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-1 border border-neutral-600"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      Download
+                    </button>
+                  </div>
+                </div>
+
+                {/* Quick Highlights */}
+                <div className="bg-gradient-to-br from-neutral-800/50 to-neutral-900/50 rounded-xl p-4 border border-neutral-700/50">
+                  <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                    <svg
+                      className="w-4 h-4 text-amber-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                    Key Features
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                      <span className="text-xs text-neutral-300">
+                        Health-focused blockchain
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                      <span className="text-xs text-neutral-300">
+                        Solana-powered
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>
+                      <span className="text-xs text-neutral-300">
+                        Community-driven
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Trade Form Section */}
           <div className="w-full max-w-4xl mx-auto">
             <div className="bg-gradient-to-br from-neutral-900/95 to-black/95 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8 border border-neutral-800/50">
